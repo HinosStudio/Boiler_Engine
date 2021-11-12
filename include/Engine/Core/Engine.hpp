@@ -2,10 +2,11 @@
 #define BOILER_ENGINE_ENGINE_HPP
 
 #include <memory>
-#include <Engine/Input/IInputSubsystem.hpp>
-
-#include "Engine/Rendering/IRenderSubsystem.hpp"
-#include "Engine/Core/Time.hpp"
+#include
+#include <Input/IInputSubsystem.hpp>
+#include <Engine/Interfaces/IRenderSubsystem.hpp>
+#include <Engine/Core/Time.hpp>
+#include <Engine/Core/Scene.hpp>
 
 class Engine {
 private:
@@ -13,11 +14,13 @@ private:
     bool _running;
     Time _time;
 
+    std::unique_ptr<Scene> _scene;
+
     std::unique_ptr<IInputSubsystem> _input;
     std::unique_ptr<IRenderSubsystem> _renderer;
 
 public:
-    Engine(std::unique_ptr<IInputSubsystem>& input, std::unique_ptr<IRenderSubsystem>& renderer);
+    Engine();
 
     static bool Init();
 

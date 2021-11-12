@@ -1,4 +1,4 @@
-#include "SDLimp/Extensions/CircleRenderer.hpp"
+#include "Extensions/CircleRenderer.hpp"
 
 CircleRenderer::CircleRenderer(Entity *entity) : Renderer{entity} {}
 

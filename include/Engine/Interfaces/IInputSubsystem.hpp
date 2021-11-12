@@ -1,7 +1,3 @@
-//
-// Created by sjors on 11/3/2021.
-//
-
 #ifndef BOILER_ENGINE_IINPUTSUBSYSTEM_HPP
 #define BOILER_ENGINE_IINPUTSUBSYSTEM_HPP
 

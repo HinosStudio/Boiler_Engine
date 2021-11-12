@@ -1,7 +1,7 @@
 #ifndef INCLUDE_FLATGALAXY_DOMAIN_FRECTRENDERER_HPP
 #define INCLUDE_FLATGALAXY_DOMAIN_FRECTRENDERER_HPP
 
-#include "Engine/Util/V2.hpp"
+#include <V2.hpp>
 
 #include "Renderer.hpp"
 

@@ -4,7 +4,8 @@
 class IRenderSubsystem {
 public:
     virtual void Initialize() = 0;
-    virtual void Render() = 0;
+    virtual void OnBegin() = 0;
+    virtual void OnEnd() = 0;
     virtual void Shutdown() = 0;
 };
 

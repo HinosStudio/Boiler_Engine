@@ -3,9 +3,8 @@
 
 #include <SDL.h>
 
-#include "Engine/Core/Extension.hpp"
-
-#include "SDLimp/Rendering/IRenderable.hpp"
+#include <Extension.hpp>
+#include <Rendering/IRenderable.hpp>
 
 class Renderer : public Extension, public IRenderable {
 protected:

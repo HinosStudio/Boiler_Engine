@@ -1,6 +1,6 @@
 #include <iostream>
-#include "SDLimp/Rendering/Color.hpp"
-#include "SDLimp/Extensions/TextRenderer.hpp"
+#include "Rendering/Color.hpp"
+#include "Extensions/TextRenderer.hpp"
 
 constexpr char* FONT_PATH {"../resources/arial.ttf"};
 

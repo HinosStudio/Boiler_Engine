@@ -1,37 +1,38 @@
-#include <iostream>
-#include "Engine/Core/Engine.hpp"
+#include <string>
+#include <SDL.h>
+#include <Engine/Core/Engine.hpp>
 
 bool Engine::init {false};
 bool Engine::Init() {return init;}
 
+Engine::Engine() : _running{false}, _time{}, _renderer{std::make_unique<SDLRendererSubsystem>()} {
 
-Engine::Engine(std::unique_ptr<IInputSubsystem>& input, std::unique_ptr<IRenderSubsystem>& renderer) : _running{false}, _time{}, _input{std::move(input)}, _renderer{std::move(renderer)} {
-
-};
+}
 
 void Engine::Initialize() {
-    //TODO: initialize subsystems
-    _input->Initialize();
-    _renderer->Initialize();
+    if(SDL_Init(SDL_INIT_EVENTS) < 0) throw std::exception{"[SDL] ERROR: could not initialize Events!"};
 
+    _renderer->Initialize();
     _time.LastTick();
     init = true;
 }
 
 void Engine::Run() {
-    _running = true;
-    while(_running) {
-        _input->Update();
-        //TODO: update physics
-        //TODO: update Logic
-        std::cout << "DeltaTime: " << _time.DeltaTime() << '\n';
-        _time.LastTick();
-        _renderer->Render();
+    SDL_Event event;
+
+    while(true) {
+        //TODO: handle in eventsystem
+        if(SDL_WaitEvent(&event)) {
+            if(event.type == SDL_QUIT) break;
+        }
+
+        _renderer->OnBegin();
+        //TODO: run simulation
+        _renderer->OnEnd();
     }
 }
 
 void Engine::Shutdown() {
-    //TODO: Clean up subsystems
     _renderer->Shutdown();
-    _input->Shutdown();
+    SDL_Quit();
 }

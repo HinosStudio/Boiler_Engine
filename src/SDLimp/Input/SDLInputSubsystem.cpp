@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include <iostream>
 
-#include "SDLimp/Input/SDLInputSubsystem.hpp"
+#include "Input/SDLInputSubsystem.hpp"
 
 void SDLInputSubsystem::Initialize() {
     if(SDL_Init(SDL_INIT_EVENTS) < 0){

@@ -1,7 +1,7 @@
 #ifndef BOILER_ENGINE_SDLINPUTSUBSYSTEM_HPP
 #define BOILER_ENGINE_SDLINPUTSUBSYSTEM_HPP
 
-#include <Engine/Input/IInputSubsystem.hpp>
+#include <IInputSubsystem.hpp>
 
 class SDLInputSubsystem : public IInputSubsystem {
 private:

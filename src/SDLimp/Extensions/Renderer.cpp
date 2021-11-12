@@ -1,5 +1,5 @@
-#include "SDLimp/Extensions/Renderer.hpp"
-#include "SDLimp/Rendering/Color.hpp"
+#include "Extensions/Renderer.hpp"
+#include "Rendering/Color.hpp"
 
 Renderer::Renderer(Entity* entity) : Extension{entity} {}
 

@@ -5,10 +5,8 @@
 #include <memory>
 #include <SDL.h>
 #include <SDL_ttf.h>
-
-#include "Engine/Util/V2.hpp"
-
-#include "Renderer.hpp"
+#include <V2.hpp>
+#include <Extensions/Renderer.hpp>
 
 //TODO: move into _window
 void init_TTF();

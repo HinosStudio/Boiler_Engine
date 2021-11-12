@@ -1,4 +1,4 @@
-#include "SDLimp/Extensions/FRectRenderer.hpp"
+#include "Extensions/FRectRenderer.hpp"
 
 FRectRenderer::FRectRenderer(Entity * entity) : Renderer{entity}, _size{} {}
 

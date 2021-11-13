@@ -5,7 +5,7 @@
 bool Engine::init {false};
 bool Engine::Init() {return init;}
 
-Engine::Engine() : _running{false}, _time{} {
+Engine::Engine(std::unique_ptr<IRenderSubsystem> renderer) : _running{false}, _time{}, _renderer{std::move(renderer)} {
 
 }
 

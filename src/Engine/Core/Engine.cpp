@@ -1,11 +1,11 @@
 #include <string>
 #include <SDL.h>
-#include <Engine/Core/Engine.hpp>
+#include <Core/Engine.hpp>
 
 bool Engine::init {false};
 bool Engine::Init() {return init;}
 
-Engine::Engine() : _running{false}, _time{}, _renderer{std::make_unique<SDLRendererSubsystem>()} {
+Engine::Engine() : _running{false}, _time{} {
 
 }
 

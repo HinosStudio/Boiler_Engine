@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 #include <Extension.hpp>
-#include <Rendering/IRenderable.hpp>
+#include "../Rendering/IRenderable.hpp"
 
 class Renderer : public Extension, public IRenderable {
 protected:

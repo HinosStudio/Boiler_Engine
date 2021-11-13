@@ -2,7 +2,7 @@
 #define BOILER_ENGINE_SDLRENDERERSUBSYSTEM_HPP
 
 #include <IRenderSubsystem.hpp>
-#include <Rendering/Window.hpp>
+#include "Window.hpp"
 
 class SDLRendererSubsystem : public IRenderSubsystem {
 private:

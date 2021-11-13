@@ -14,8 +14,13 @@ add_library(Boiler_Engine_Lib STATIC
         Util/Rect.cpp
         )
 
-target_include_directories(Boiler_Engine_Lib PRIVATE ${CMAKE_SOURCE_DIR}/include/Engine)
+target_include_directories(Boiler_Engine_Lib PRIVATE
+        ${CMAKE_SOURCE_DIR}/include/Engine
+        )
 
 find_package(SDL2 CONFIG REQUIRED)
 
-target_link_libraries(Boiler_Engine_Lib PRIVATE SDL2::SDL2 SDL2::SDL2main)
+target_link_libraries(Boiler_Engine_Lib PRIVATE
+        SDL2::SDL2
+        SDL2::SDL2main
+        )

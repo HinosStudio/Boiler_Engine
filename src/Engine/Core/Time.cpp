@@ -1,4 +1,4 @@
-#include "Engine/Core/Time.hpp"
+#include <Core/Time.hpp>
 
 float Time::time_scale {1};
 std::chrono::time_point<std::chrono::steady_clock> Time::_lastTick;

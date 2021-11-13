@@ -1,8 +1,7 @@
 #include <iostream>
 #include <algorithm>
-
-#include "Engine/Core/Entity.hpp"
-#include "Engine/Core/Extension.hpp"
+#include <Core/Entity.hpp>
+#include <Core/Extension.hpp>
 
 Entity::Entity() : _name{"gameObject"}, _active{true}, _position{V2::Zero}, _parent{nullptr} {}
 

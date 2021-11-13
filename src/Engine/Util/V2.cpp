@@ -1,7 +1,5 @@
-#include <math.h>
-
 #include <cmath>
-#include "Engine/Util/V2.hpp"
+#include <Util/V2.hpp>
 
 const V2 V2::Zero {0,0};
 

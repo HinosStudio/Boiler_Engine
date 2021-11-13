@@ -6,7 +6,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <V2.hpp>
-#include <Extensions/Renderer.hpp>
+#include "Renderer.hpp"
 
 //TODO: move into _window
 void init_TTF();

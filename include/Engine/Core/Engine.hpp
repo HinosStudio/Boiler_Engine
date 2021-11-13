@@ -2,11 +2,10 @@
 #define BOILER_ENGINE_ENGINE_HPP
 
 #include <memory>
-#include
-#include <Input/IInputSubsystem.hpp>
-#include <Engine/Interfaces/IRenderSubsystem.hpp>
-#include <Engine/Core/Time.hpp>
-#include <Engine/Core/Scene.hpp>
+#include "../Interfaces/IInputSubsystem.hpp"
+#include "../Interfaces/IRenderSubsystem.hpp"
+#include "Time.hpp"
+#include "Scene.hpp"
 
 class Engine {
 private:

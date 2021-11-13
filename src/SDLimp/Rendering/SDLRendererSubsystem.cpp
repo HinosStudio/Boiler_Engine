@@ -2,7 +2,7 @@
 #include <exception>
 #include <iostream>
 #include <SDL_ttf.h>
-#include "Rendering/SDLRendererSubsystem.hpp"
+#include <Rendering/SDLRendererSubsystem.hpp>
 
 SDLRendererSubsystem::SDLRendererSubsystem() :
         _window{std::unique_ptr<SDL_Window, void (*)(SDL_Window *)>{nullptr, SDL_DestroyWindow}},

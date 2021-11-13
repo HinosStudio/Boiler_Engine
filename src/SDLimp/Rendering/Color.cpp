@@ -1,4 +1,4 @@
-#include "Rendering/Color.hpp"
+#include <Rendering/Color.hpp>
 
 const std::map<std::string, SDL_Color> Color::colors{
         {"black",  BLACK},

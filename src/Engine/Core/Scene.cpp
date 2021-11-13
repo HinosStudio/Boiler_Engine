@@ -1,4 +1,4 @@
-#include "Engine/Core/Scene.hpp"
+#include <Core/Scene.hpp>
 
 Scene::Scene() : _active{true} {}
 

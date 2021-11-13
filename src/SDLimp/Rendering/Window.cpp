@@ -1,4 +1,4 @@
-#include "Rendering/Window.hpp"
+#include <Rendering/Window.hpp>
 
 Window::Window(const int width, const int height) :
         _window{std::unique_ptr<SDL_Window, void (*)(SDL_Window *)>{

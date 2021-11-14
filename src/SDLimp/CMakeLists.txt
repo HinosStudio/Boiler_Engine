@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(SDL_Rendering)
 
-set(CMAKE_CXX_STANDARD 17)
-
-
 add_library(SDL_Rendering STATIC
         Rendering/Window.cpp
         Rendering/Color.cpp

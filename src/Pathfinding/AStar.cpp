@@ -14,8 +14,7 @@ std::vector<const INode*>& AStar::GetPath(const INode &src, const INode &dest) {
     _link.clear(); _gScore.clear(); _hScore.clear(); _fScore.clear();
 
     _gScore[&src] = 0;
-    _hScore[&src] = src.EstimatedCostTo(dest);
-    _fScore[&src] = _hScore[&src];
+    _fScore[&src] = src.EstimatedCostTo(dest);
 
     const INode * current, * from;
     float tentativeGScore;
@@ -36,8 +35,7 @@ std::vector<const INode*>& AStar::GetPath(const INode &src, const INode &dest) {
                 if(tentativeIsBetter){
                     _link[next] = current;
                     _gScore[next] = tentativeGScore;
-                    _hScore[next] = next->EstimatedCostTo(dest);
-                    _fScore[next] = _gScore[next] + _hScore[next];
+                    _fScore[next] = _gScore[next] + next->EstimatedCostTo(dest);
                 }
             }
         }

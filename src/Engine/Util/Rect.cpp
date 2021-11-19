@@ -1,4 +1,8 @@
+<<<<<<< HEAD:src/Engine/Util/Rect.cpp
 #include <util/Rect.hpp>
+=======
+#include <Util/Rect.hpp>
+>>>>>>> 207468bc77eb409a019ca900702ea34ae3a5f971:src/Engine/Util/Rectangle.cpp
 
 Rect Rect::Zero{0, 0, 0, 0};
 

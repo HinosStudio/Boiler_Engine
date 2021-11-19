@@ -1,4 +1,4 @@
-#include <Time.hpp>
+#include <Core/Time.hpp>
 
 float Time::time_scale {1};
 Uint32 Time::last_tick {};

@@ -1,8 +1,8 @@
 #ifndef BOILER_ENGINE_SDLRENDERERSUBSYSTEM_HPP
 #define BOILER_ENGINE_SDLRENDERERSUBSYSTEM_HPP
 
+#include <SDL.h>
 #include <IRenderSubsystem.hpp>
-#include <Rendering/Window.hpp>
 
 class SDLRendererSubsystem : public IRenderSubsystem {
 private:

@@ -1,4 +1,4 @@
-#include "Engine/Core/Extension.hpp"
+#include <Core/Extension.hpp>
 
 Extension::Extension(Entity* entity) : _entity {entity}, _active{true} {}
 

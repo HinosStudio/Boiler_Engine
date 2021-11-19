@@ -1,5 +1,5 @@
 #include <cmath>
-#include <util/V2.hpp>
+#include <Util/V2.hpp>
 
 const V2 V2::Zero{0, 0};
 const V2 V2::One{1, 1};

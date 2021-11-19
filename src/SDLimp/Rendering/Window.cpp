@@ -1,4 +1,4 @@
-#include <Window.hpp>
+#include <Rendering/Window.hpp>
 
 int Window::width{0};
 int Window::height{0};

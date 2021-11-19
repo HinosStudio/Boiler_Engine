@@ -9,7 +9,7 @@ add_library(Boiler_Engine STATIC
         Core/Time.cpp
 
         Util/V2.cpp
-        Util/Rectangle.cpp
+        Util/Rect.cpp
         ../ECS/EntityManager.cpp ../ECS/EntityComponent.cpp)
 
 target_include_directories(Boiler_Engine PUBLIC ${CMAKE_SOURCE_DIR}/include/Engine)

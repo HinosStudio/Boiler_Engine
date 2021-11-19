@@ -1,11 +1,21 @@
-#include "Rendering/Window.hpp"
+#include <Window.hpp>
 
-Window::Window(const int width, const int height) :
-        _window{std::unique_ptr<SDL_Window, void (*)(SDL_Window *)>{
-                SDL_CreateWindow("Boiler Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0),
-                SDL_DestroyWindow}} {
+int Window::width{0};
+int Window::height{0};
+
+int Window::GetWidth() {
+    return width;
 }
 
-void Window::Close() {
-
+int Window::GetHeight() {
+    return height;
 }
+
+Window::Window(SDL_Window *window) : _window{window} {
+    SDL_GetWindowSize(window, &width, &height);
+}
+
+Window::~Window() {
+    SDL_DestroyWindow(_window);
+}
+

@@ -1,31 +1,34 @@
-#ifndef INCLUDE_FLATGALAXY_DOMAIN_RECT_HPP
-#define INCLUDE_FLATGALAXY_DOMAIN_RECT_HPP
+#pragma once
 
-#include "V2.hpp"
+#include "v2.hpp"
 
-class Rect {
-private:
-    coord _x;
-    coord _y;
-    coord _w;
-    coord _h;
+struct SDL_Rect;
 
-public:
-    static const Rect Zero;
+/// \brief Default rectangle implementation
+struct Rect {
+    coord x, y, w, h;
+
+    Rect();
 
     Rect(coord x, coord y, coord w, coord h);
-    Rect(const V2 &, const V2 &);
 
-    coord Width() const; void Width(const coord);
-    coord Height() const; void Height(const coord);
+    Rect(const V2 &origin, const V2 &width);
 
-    V2 Origin() const; void Origin(const V2 &);
-    V2 Extend() const; void Extend(const V2 &);
+    static Rect Zero;
 
-    V2 Center() const;
+    V2 Origin() const;
+
+    void Origin(const V2 &);
+
+    V2 Extend() const;
+
+    void Extend(const V2 &);
+
+    void MoveTo(const V2 &);
+
+    void MoveBy(const V2 &);
 
     bool Contains(const V2 &) const;
+
+    explicit operator SDL_Rect() const;
 };
-
-
-#endif //INCLUDE_FLATGALAXY_DOMAIN_RECT_HPP

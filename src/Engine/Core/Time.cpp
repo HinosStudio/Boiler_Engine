@@ -1,22 +1,21 @@
-#include "Engine/Core/Time.hpp"
+#include <Time.hpp>
 
 float Time::time_scale {1};
-std::chrono::time_point<std::chrono::steady_clock> Time::_lastTick;
+Uint32 Time::last_tick {};
 
-void Time::LastTick() {
-    _lastTick = std::chrono::high_resolution_clock::now();
+void Time::set_last_tick() {
+    last_tick = SDL_GetTicks();
 }
 
-float Time::DeltaTime() {
-    auto now = std::chrono::high_resolution_clock::now();
-    return std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastTick).count() * 0.001f; //((SDL_GetTicks() - last_tick) / 1000.0f) * time_scale;
+float Time::get_delta_time() {
+    return ((SDL_GetTicks() - last_tick) / 1000.0f) * time_scale;
 }
 
-float Time::TimeScale() {
+float Time::get_time_scale() {
     return time_scale;
 }
 
-void Time::TimeScale(float value) {
+void Time::set_time_scale(float value) {
     time_scale = value;
     if(time_scale < 0) time_scale = 0;
 }

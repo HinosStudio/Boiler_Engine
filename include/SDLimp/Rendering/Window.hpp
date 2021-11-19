@@ -1,19 +1,16 @@
-#ifndef FLATGALAXY_WINDOW_HPP
-#define FLATGALAXY_WINDOW_HPP
+#pragma once
 
 #include <SDL.h>
-#include <memory>
 
-class Window {
+class Window{
 private:
-    SDL_Color _backgroundColor {61, 61, 61, 255};
-    std::unique_ptr<SDL_Window, void(*)(SDL_Window*)> _window;
+    static int width, height;
+    SDL_Window *_window;
 
 public:
-    Window(const int width, const int height);
+    static int GetWidth();
+    static int GetHeight();
 
-    void Close();
+    Window(SDL_Window *window);
+    ~Window();
 };
-
-
-#endif //FLATGALAXY_WINDOW_HPP

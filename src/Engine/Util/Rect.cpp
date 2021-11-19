@@ -1,54 +1,45 @@
-#include "Engine/Util/Rect.hpp"
+#include <util/Rect.hpp>
 
-const Rect Rect::Zero{0, 0, 0, 0};
+Rect Rect::Zero{0, 0, 0, 0};
 
-Rect::Rect(coord x, coord y, coord w, coord h) : _x{x}, _y{y}, _w{w}, _h{h} {}
-
-Rect::Rect(const V2 &origin, const V2 &extent) : _x{origin.X()}, _y{origin.Y()}, _w{extent.X()}, _h{extent.Y()} {}
-
-coord Rect::Width() const {
-    return _w;
+Rect::Rect() : x{0}, y{0}, w{0}, h{0} {
 }
 
-void Rect::Width(const coord width) {
-    _w = width;
+Rect::Rect(coord x, coord y, coord w, coord h) : x{x}, y{y}, w{w}, h{h} {
 }
 
-coord Rect::Height() const {
-    return _h;
-}
-
-void Rect::Height(const coord height) {
-    _h = height;
+Rect::Rect(const V2& origin, const V2& extend)
+    : x{origin.x}, y{origin.y}, w{extend.x}, h{extend.y} {
 }
 
 V2 Rect::Origin() const {
-    return V2{_x, _h};
+    return V2{x, y};
 }
 
-void Rect::Origin(const V2 &point) {
-    _x = point.X();
-    _y = point.Y();
+void Rect::Origin(const V2& point) {
+    x = point.x;
+    y = point.y;
 }
 
 V2 Rect::Extend() const {
-    return V2{_w, _h};
+    return V2{w, h};
 }
 
-void Rect::Extend(const V2 &point) {
-    _w = point.X();
-    _h = point.Y();
+void Rect::Extend(const V2& size) {
+    w = size.x;
+    h = size.y;
 }
 
-V2 Rect::Center() const {
-    return Origin() + (Extend() / 2);
+void Rect::MoveTo(const V2& point) {
+    x = point.x;
+    y = point.y;
 }
 
-bool Rect::Contains(const V2 &point) const {
-    return (
-            (point.X() >= _x) &&
-            (point.X() <= _x + _w) &&
-            (point.Y() >= _y) &&
-            (point.Y() <= _y + _h)
-    );
+void Rect::MoveBy(const V2& translation) {
+    x += translation.x;
+    y += translation.y;
+}
+
+bool Rect::Contains(const V2& point) const {
+    return (point.x > x) && (point.y > y) && (point.x < (x + w)) && (point.y < (y + h));
 }

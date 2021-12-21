@@ -2,15 +2,9 @@
 
 #include <map>
 #include <vector>
+#include "Event.hpp"
 
 class Observer;
-
-enum EventType {
-    EMPTY,
-    SHUTDOWN,
-    KEY_EVENT,
-    MOUSE_EVENT
-};
 
 class EventSystem {
 private:
@@ -29,7 +23,7 @@ public:
 
     void Unsubscribe(EventType, Observer *observer);
 
-    void Notify(EventType, void *payload);
+    void Notify(Event &event);
 
     void PollEvents();
 };

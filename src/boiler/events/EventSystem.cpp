@@ -2,6 +2,7 @@
 #include <boiler/messaging/Observer.hpp>
 #include <SDL.h>
 #include <sstream>
+#include "boiler/events/Event.hpp"
 
 EventSystem *EventSystem::_instance{nullptr};
 
@@ -35,31 +36,32 @@ void EventSystem::Unsubscribe(EventType eventType, Observer *observer) {
     }
 }
 
-void EventSystem::Notify(EventType eventType, void *payload) {
-    if (_observers.count(eventType) > 0) {
-        auto &observers = _observers.at(eventType);
-        for (const auto &item: observers) item->HandleMessage(eventType, payload);
+void EventSystem::Notify(Event &event) {
+    if (_observers.count(event.GetEventType()) > 0) {
+        auto &observers = _observers.at(event.GetEventType());
+        for (const auto &item: observers) item->HandleMessage(event);
     }
 }
 
 void EventSystem::PollEvents() {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
+    SDL_Event sdlEvent;
+    ShutdownEvent event;
+    while (SDL_PollEvent(&sdlEvent)) {
+        switch (sdlEvent.type) {
 
             case SDL_QUIT:
-                Notify(SHUTDOWN, nullptr);
+                Notify(event);
                 break;
 
             case SDL_KEYDOWN:
             case SDL_KEYUP:
-                Notify(KEY_EVENT, nullptr);
+
                 break;
 
             case SDL_MOUSEMOTION:
             case SDL_MOUSEBUTTONDOWN:
             case SDL_MOUSEBUTTONUP:
-                Notify(MOUSE_EVENT, nullptr);
+
                 break;
         }
     }

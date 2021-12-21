@@ -3,110 +3,142 @@
 #include <stdexcept>
 #include <array>
 
-template<typename T, unsigned int S, unsigned int N, typename derived>
+template<typename T, unsigned int N>
 class Composite {
 protected:
-    std::array<T, S> _values;
-    unsigned int _size, _columns, _rows;
+    T _values[N];
 
 public:
-    Composite() : _size{S}, _columns{N}, _rows{S / N} {
-        std::fill(_values.begin(), _values.end(), 0);
-    }
-
-    ~Composite() = default;
-
-//---------------------------------------------------------
-// Rule of 3
-//---------------------------------------------------------
-/*
-    Composite(const Composite& other) : _size{S}, _columns{N}, _rows{S / N} {
-        _values = new T[_size];
-        std::memcpy(_values, other._values, _size);
-    }
-
-    Composite &operator=(const Composite &other) {
-        if (this != &other) {
-            T *new_array = new T[other._size];
-            std::memcpy(other._values, other._values + other._size, new_array);
-
-            delete[] _values;
-
-            _values = new_array;
-            _size = other._size;
-        }
-        return *this;
-    }
-    */
-
-//---------------------------------------------------------
-// Index Operator
-//---------------------------------------------------------
 
     T &operator[](int index) {
-        if (index > _size - 1) throw std::out_of_range{"index out of range"};
+        if (index > N - 1) throw std::out_of_range{"index out of range"};
         return _values[index];
     }
 
     const T &operator[](int index) const {
-        if (index > _size - 1) throw std::out_of_range{"index out of range"};
+        if (index > N - 1) throw std::out_of_range{"index out of range"};
         return _values[index];
     }
 
-//---------------------------------------------------------
-// Additive Operations
-//---------------------------------------------------------
-
-    Composite &operator+=(const Composite &other) {
-        for (int i = 0; (i < _size && i < other._size); ++i) {
-            _values[i] += other[i];
-        }
-        return *this;
-    }
-
-    friend derived operator+(const derived &a, const derived &b) {
-        derived temp;
-        for (int i = 0; (i < a._size && i < b._size); ++i) {
-            temp[i] = a[i] + b[i];
+    Composite operator+(T value) const {
+        Composite temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = _values[i] + value;
         }
         return temp;
     }
 
-//---------------------------------------------------------
-// Subtract Operations
-//---------------------------------------------------------
-
-    Composite &operator-=(const Composite &other) {
-        for (int i = 0; (i < _size && i < other._size); ++i) {
-            _values[i] -= other[i];
+    Composite operator-(T value) const {
+        Composite temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = _values[i] - value;
         }
-        return *this;
+        return temp;
     }
 
-    derived operator-(const derived &other) {
-        derived temp;
-        for (int i = 0; (i < _size && i < other._size); ++i) {
+    Composite operator*(T value) const {
+        Composite temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = _values[i] * value;
+        }
+        return temp;
+    }
+
+    Composite operator/(T value) const {
+        return operator*((T)1 / value);
+    }
+
+    Composite operator+(const Composite &other) const {
+        Composite temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = _values[i] + other[i];
+        }
+        return temp;
+    }
+
+    Composite operator-(const Composite &other) const {
+        Composite temp;
+        for (int i = 0; i < N; ++i) {
             temp[i] = _values[i] - other[i];
         }
         return temp;
     }
 
-//---------------------------------------------------------
-// Scalar Operations
-//---------------------------------------------------------
-
-    derived operator*(const T &value) const {
-        derived temp;
-        for (int i = 0; i < _size; ++i)
-            temp[i] = _values[i] * value;
+    Composite operator*(const Composite &other) const {
+        Composite temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = _values[i] * other[i];
+        }
         return temp;
     }
 
-    derived operator/(const T &value) const {
-        derived temp;
-        for (int i = 0; i < _size; ++i)
-            temp[i] = _values[i] * value;
+    Composite operator/(const Composite &other) const {
+        Composite temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = _values[i] / other[i];
+        }
         return temp;
+    }
+
+    Composite &operator+=(T value) {
+        for (int i = 0; i < N; ++i) {
+            _values[i] += value;
+        }
+        return *this;
+    }
+
+    Composite &operator-=(T value) {
+        for (int i = 0; i < N; ++i) {
+            _values[i] -= value;
+        }
+        return *this;
+    }
+
+    Composite &operator*=(T value) {
+        for (int i = 0; i < N; ++i) {
+            _values[i] *= value;
+        }
+        return *this;
+    }
+
+    Composite &operator/=(T value) {
+        return operator*=((T)1 / value);
+    }
+
+    Composite &operator+=(const Composite &other) {
+        for (int i = 0; i < N; ++i) {
+            _values[i] += other[i];
+        }
+        return *this;
+    }
+
+    Composite &operator-=(const Composite &other) {
+        for (int i = 0; i < N; ++i) {
+            _values[i] -= other[i];
+        }
+        return *this;
+    }
+
+    Composite &operator*=(const Composite &other) {
+        for (int i = 0; i < N; ++i) {
+            _values[i] *= other[i];
+        }
+        return *this;
+    }
+
+    Composite &operator/=(const Composite &other) {
+        for (int i = 0; i < N; ++i) {
+            _values[i] /= other[i];
+        }
+        return *this;
+    }
+
+    void Fill(float value){
+        std::fill(_values, _values + N, value);
+    }
+
+    void MakeZero(){
+        Fill(0);
     }
 };
 

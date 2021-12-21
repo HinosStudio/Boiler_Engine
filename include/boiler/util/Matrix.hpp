@@ -1,30 +1,19 @@
 #pragma once
 
-#include <array>
 #include <boiler/util/Composite.hpp>
-#include <boiler/util/Vector.hpp>
 
-template<typename T, unsigned int S, unsigned int N, typename derived>
-class MatrixBase : public Composite<T, S, N, derived> {
+template<typename T, unsigned int N, unsigned int M>
+class Matrix_Base : public Composite<T, N * M> {
 public:
-    MatrixBase() : Composite<T, S, N, derived>{} {
-    }
+    Matrix_Base operator*(const Matrix_Base &other) const {
+        if(N != M) throw std::runtime_error("cannot multiply array");
+        Matrix_Base temp{};
 
-    MatrixBase(const std::array<T, S> &values) : Composite<T, S, N, derived>{} {
-        for (int i = 0; i < this->_size; ++i)
-            this->_values[i] = values[i];
-    }
-
-    MatrixBase<T, S, N, derived> operator*(const MatrixBase<T, S, N, derived> &other) {
-        if (this->_columns != other._rows) throw std::exception{"cannot multiply vectors"};
-
-        MatrixBase<T,S,N, derived> temp{};
-
-        for (int i = 0; i < this->_rows; ++i) {
-            for (int j = 0; j < other._columns; ++j) {
-                auto index = (i * temp._columns) + j;
-                for (int k = 0; k < this->_columns; ++k) {
-                    temp[index] += this->_values[(i * this->_columns) + k] * other[(k * other._columns) + j];
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < N; ++j) {
+                auto index = (i * N) + j;
+                for (int k = 0; k < N; ++k) {
+                    temp[index] += this->_values[(i * N) + k] * other[(k * N) + j];
                 }
             }
         }
@@ -32,88 +21,132 @@ public:
         return temp;
     }
 
-    friend Vector<T,N> operator*(const MatrixBase &a, const Vector<T, N> &b) {
-        if (a._columns != N) throw std::exception{"cannot multiply vectors"};
+    void operator*=(const Matrix_Base &other){
+        *this = operator*(other);
+    }
 
-        Vector<T,N> temp {};
-
-        for (int i = 0; i < a._rows; ++i) {
-            for (int j = 0; j < 1; ++j) {
-                auto index = (i * 1) + j;
-                for (int k = 0; k < a._columns; ++k) {
-                    temp[index] += a._values[(i * a._columns) + k] * b[(k * 1) + j];
-                }
+    Composite<T, N> operator*(const Composite<T,N> &vector){
+        Composite<T,N> temp;
+        temp.MakeZero();
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < N; ++j) {
+                temp[i] += this->_values[(i * N) + j] * vector[j];
             }
         }
-
         return temp;
     }
-};
 
-//---------------------------------------------------------
-// Matrix
-//---------------------------------------------------------
-
-template<typename T, unsigned int S, unsigned int N>
-class Matrix : public MatrixBase<T, S, N, Matrix<T, S, N>> {
-public:
-    Matrix() : MatrixBase<T, S, N, Matrix<T, S, N>>{} {
-    }
-
-    Matrix(const std::array<T, S> &values) : MatrixBase<T, S, N, Matrix<T, S, N>>{values} {
-
+    void MakeIdentity(){
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < M; ++j) {
+                this->_values[(i * M) + j] = i == j;
+            }
+        }
     }
 };
 
-//---------------------------------------------------------
-// Matrix 2
-//---------------------------------------------------------
+template<typename T, unsigned int N, unsigned int M>
+class Matrix : public Matrix_Base<T,N,M>{
 
-using M2 = Matrix<float, (2 * 2), 2>;
+};
+
+typedef Matrix<float, 3, 3> M3;
+typedef Matrix<float, 4, 4> M4;
 
 template<typename T>
-class Matrix<T, (2 * 2), 2> : public MatrixBase<T, (2 * 2), 2, M2> {
-public:
-    static Matrix<T, (2 * 2), 2> identity {
-        1,0,
-        0,1
-    };
-
-    Matrix() : MatrixBase<T, (2 * 2), 2, M2>{} {
-    }
-};
-
-//---------------------------------------------------------
-// Matrix 3
-//---------------------------------------------------------
-
-using M3 = Matrix<float, (3 * 3), 3>;
-
-template<typename T>
-class Matrix<T, (3 * 3), 3> : public MatrixBase<T, (3 * 3), 3, Matrix<float, (3 * 3), 3>> {
+class Matrix<T, 4, 4> : public Matrix_Base<T,4,4>{
 public:
 
-    Matrix() : MatrixBase<T, (3 * 3), 3, Matrix<float, (3 * 3), 3>>{} {
+    Matrix &operator=(const Composite<T, 16> &other) {
+        if (this != &other) {
+            for (int i = 0; i < 16; ++i) {
+                this->_values[i] = other[i];
+            };
+        }
+        return *this;
     }
 
-    Matrix(const std::array<T, (3*3)> &values) : MatrixBase<T, (3*3), 3, Matrix<T, (3*3), 3>>{values} {
-
-    }
-};
-
-//---------------------------------------------------------
-// Matrix 4
-//---------------------------------------------------------
-
-typedef Matrix<float, (4 * 4), 4> M4;
-
-template<typename T>
-class Matrix<T, (4 * 4), 4> : public MatrixBase<T, (4 * 4), 4, M4> {
-public:
-    Matrix() : MatrixBase<T, (4 * 4), 4, M4>{} {
+    void MakeRotX(float value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[5] = std::cos(value);
+        this->_values[6] = -std::sin(value);
+        this->_values[9] = std::sin(value);
+        this->_values[10] = std::cos(value);
     }
 
-    Matrix(const std::array<T, (4*4)> &values) : MatrixBase<T, (4*4), 4, M4>{values} {
-
+    void MakeRotY(float value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[0] = std::cos(value);
+        this->_values[2] = -std::sin(value);
+        this->_values[8] = std::sin(value);
+        this->_values[10] = std::cos(value);
     }
+
+    void MakeRotZ(float value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[0] = std::cos(value);
+        this->_values[1] = -std::sin(value);
+        this->_values[4] = std::sin(value);
+        this->_values[5] = std::cos(value);
+    }
+
+    void MakeRotXR(float value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[5] = std::cos(value);
+        this->_values[6] = std::sin(value);
+        this->_values[9] = -std::sin(value);
+        this->_values[10] = std::cos(value);
+    }
+
+    void MakeRotYR(float value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[0] = std::cos(value);
+        this->_values[2] = std::sin(value);
+        this->_values[8] = -std::sin(value);
+        this->_values[10] = std::cos(value);
+    }
+
+    void MakeRotZR(float value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[0] = std::cos(value);
+        this->_values[1] = std::sin(value);
+        this->_values[4] = -std::sin(value);
+        this->_values[5] = std::cos(value);
+    }
+
+    void MakeTrans(const Composite<T,3> &value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[3] = value[0];
+        this->_values[7] = value[1];
+        this->_values[11] = value[2];
+    }
+
+    void MakeScale(const Composite<T,3> &value){
+        Matrix_Base<T,4,4>::MakeIdentity();
+        this->_values[0] = value[0];
+        this->_values[5] = value[1];
+        this->_values[10] = value[2];
+    }
+
+    void MakeProjection(float near, float far, float fov, float aspect){
+        float fovRad = near / std::tan(fov * 0.5f / 180.0f * 3.14159f);
+
+        Matrix_Base<T,4,4>::MakeZero();
+        this->_values[0] = aspect * fovRad;
+        this->_values[5] = fovRad;
+        this->_values[10] = far / (far - near);
+        this->_values[11] = -1.0f;
+        this->_values[14] = (-far * near) / (far - near);
+    }
+
+    static M4 Zero(){M4 m; m.MakeZero(); return m;}
+    static M4 Identity(){M4 m; m.MakeIdentity(); return m;}
+    static M4 RotX(float value){M4 m; m.MakeRotX(value); return m;}
+    static M4 RotY(float value){M4 m; m.MakeRotY(value); return m;}
+    static M4 RotZ(float value){M4 m; m.MakeRotZ(value); return m;}
+    static M4 RotXR(float value){M4 m; m.MakeRotXR(value); return m;}
+    static M4 RotYR(float value){M4 m; m.MakeRotYR(value); return m;}
+    static M4 RotZR(float value){M4 m; m.MakeRotZR(value); return m;}
+    static M4 Trans(const Composite<T,3> &vector){M4 m; m.MakeTrans(vector); return m;}
+    static M4 Scale(const Composite<T,3> &vector){M4 m; m.MakeScale(vector); return m;}
 };

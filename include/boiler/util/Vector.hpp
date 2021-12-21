@@ -3,132 +3,141 @@
 #include <boiler/util/Composite.hpp>
 #include <cmath>
 
-template<typename T, unsigned int N, typename derived>
-class VectorBase : public Composite<T, N, N, derived> {
+template<typename T, unsigned int N>
+class Vector_Base : public Composite<T, N> {
 public:
-    VectorBase() : Composite<T, N, N, derived>{} {
-    }
-
-    VectorBase(const VectorBase& other) : Composite<T, N, N, derived>{other}{
-    }
-
-    friend derived operator*(const derived &a, const derived &b){
-        derived temp;
-        for(int i = 0; i < a._size; i++)
-            temp[i] = a[i] * b[i];
+    Vector_Base operator-() const{
+        Vector_Base temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = -this->_values[i];
+        }
         return temp;
     }
 
-    [[nodiscard]] float magnitude() const {
-        float temp{0};
-        for (int i = 0; i < this->_size; ++i) {
-            temp += this->_values[i] * this->_values[i];
+    Vector_Base operator-(const Vector_Base &other) const {
+        Vector_Base temp;
+        for (int i = 0; i < N; ++i) {
+            temp[i] = this->_values[i] - other[i];
         }
-        return std::sqrt(temp);
-    }
-
-    [[nodiscard]] derived normalized() const {
-        return *this * (1 / magnitude());
-    }
-
-    static float distance(const derived &a, const derived &b) {
-        derived temp = a - b;
-        return temp.magnitude();
+        return temp;
     }
 };
-
-//---------------------------------------------------------
-// Vector
-//---------------------------------------------------------
 
 template<typename T, unsigned int N>
-class Vector : public VectorBase<T, N, Vector<T, N>> {
+class Vector : public Vector_Base<T, N> {
 public:
-    Vector() : VectorBase<T, N, Vector<T, N>>{} {
-    }
+
 };
 
-//---------------------------------------------------------
-// Vector 2
-//---------------------------------------------------------
-
-using V2 = Vector<float, 2>;
+typedef Vector<float, 2> V2;
+typedef Vector<float, 3> V3;
+typedef Vector<float, 4> V4;
+typedef Vector<int, 4> V4int;
 
 template<typename T>
-class Vector<T, 2> : public VectorBase<T, 2, Vector<T, 2>> {
+class Vector<T, 2> : public Vector_Base<T, 2> {
 public:
-    Vector() : VectorBase<T, 2, Vector<T, 2>>{} {
-    }
+    Vector() = default;
 
-    Vector(const Vector& other) : VectorBase<T, 2, Vector<T, 2>>{other}{
-    }
-
-    Vector(T x, T y) : VectorBase<T, 2, Vector<T, 2>>{} {
+    Vector(T x, T y){
         this->_values[0] = x;
         this->_values[1] = y;
-    };
-
-    explicit operator Vector<T,3>() const {
-        return Vector<T,3>{this->_values[0], this->_values[1], 0};
     }
 };
 
-//---------------------------------------------------------
-// Vector 3
-//---------------------------------------------------------
-
-using V3 = Vector<float, 3>;
-
 template<typename T>
-class Vector<T, 3> : public VectorBase<T, 3, Vector<T, 3>> {
+class Vector<T, 3> : public Vector_Base<T, 3> {
 public:
-    Vector() : VectorBase<T, 3, Vector<T, 3>>{} {
-    }
+    Vector() = default;
 
-    Vector(T x, T y, T z) : VectorBase<T, 3, Vector<T, 3>>{} {
+    Vector(T x, T y, T z) {
         this->_values[0] = x;
         this->_values[1] = y;
         this->_values[2] = z;
-    };
+    }
 
-    friend V3 operator-(const V3 &a, const V2 &b) {
-        V3 temp;
-        for (int i = 0; (i < a._size && i < b._size); ++i) {
-            temp[i] = a[i] - b[i];
+    Vector &operator=(const Composite<T, 3> &other) {
+        if (this != &other) {
+            for (int i = 0; i < 3; ++i) {
+                this->_values[i] = other[i];
+            };
         }
-        return temp;
+        return *this;
     }
 
-    explicit operator V2() const {
+    Vector &operator=(const Vector_Base<T, 3> &other) {
+        if (this != &other) {
+            for (int i = 0; i < 3; ++i) {
+                this->_values[i] = other[i];
+            };
+        }
+        return *this;
+    }
+
+    [[nodiscard]] float Dot(const V3 &other) const {
+        return this->_values[0] * other[0] + this->_values[1] * other[1] + this->_values[2] * other[2];
+    }
+
+    [[nodiscard]] V3 Cross(const V3 &other) const {
+        return V3{
+                this->_values[1] * other[2] - this->_values[2] * other[1],
+                this->_values[2] * other[0] - this->_values[0] * other[2],
+                this->_values[0] * other[1] - this->_values[1] * other[0]
+        };
+    }
+
+    [[nodiscard]] float SqrMagnitude() const {
+        return this->_values[0] * this->_values[0] +
+               this->_values[1] * this->_values[1] +
+               this->_values[2] * this->_values[2];
+    }
+
+    [[nodiscard]] float Magnitude() const {
+        return std::sqrt(SqrMagnitude());
+    }
+
+    void Normalize() {
+        (*this) /= Magnitude();
+    }
+
+    [[nodiscard]] V3 Normalized() const {
+        return (*this) /= Magnitude();
+    }
+
+    explicit operator V2() const{
         return V2{this->_values[0], this->_values[1]};
-    }
-
-    explicit operator Vector<float, 4>() const {
-        return V4{this->_values[0], this->_values[1], this->_values[2], 1};
     }
 };
 
-//---------------------------------------------------------
-// Vector 4
-//---------------------------------------------------------
-
-using V4 = Vector<float, 4>;
-using V4int = Vector<int,4>;
-
 template<typename T>
-class Vector<T, 4> : public VectorBase<T, 4, Vector<T, 4>> {
+class Vector<T, 4> : public Vector_Base<T, 4> {
 public:
-    Vector() : VectorBase<T, 4, Vector<T, 4>>{} {
-    }
+    Vector() = default;
 
-    Vector(T x, T y, T z, T w) : VectorBase<T, 4, Vector<T, 4>>{} {
+    Vector(T x, T y, T z, T w) {
         this->_values[0] = x;
         this->_values[1] = y;
         this->_values[2] = z;
         this->_values[3] = w;
-    };
+    }
 
-    explicit operator V3() const {
+    Vector(const V3 &vector, float w){
+        this->_values[0] = vector[0];
+        this->_values[1] = vector[1];
+        this->_values[2] = vector[2];
+        this->_values[3] = w;
+    }
+
+    Vector &operator=(const Composite<T, 4> &other) {
+        if (this != &other) {
+            for (int i = 0; i < 4; ++i) {
+                this->_values[i] = other[i];
+            };
+        }
+        return *this;
+    }
+
+    explicit operator V3() const{
         return V3{this->_values[0], this->_values[1], this->_values[2]};
     }
 };

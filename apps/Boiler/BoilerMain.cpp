@@ -8,7 +8,7 @@ int main(int argc, char* args[]) {
     //TODO [SJORS]: between the creation and initialization we can load engine configuration settings
 
     engine.Initialize();
-    if(Engine::Init()) engine.Run();
+    if(engine.Init()) engine.Run();
 
     return 0;
 }

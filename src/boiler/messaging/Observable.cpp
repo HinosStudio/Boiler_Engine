@@ -11,7 +11,7 @@ void Observable::Unsubscribe(Observer *observer) {
     );
 }
 
-void Observable::Notify(EventType type){
-    for(auto o : _observers) o->HandleMessage(type, this);
+void Observable::Notify(Event &event){
+    for(auto o : _observers) o->HandleMessage(event);
 }
 

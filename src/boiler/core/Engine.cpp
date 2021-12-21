@@ -1,35 +1,27 @@
 #include <boiler/core/Engine.hpp>
-#include <string>
-#include <sstream>
-
-bool Engine::init{false};
-
-bool Engine::Init() {
-    return init;
-}
+#include <boiler/events/EventDispatcher.hpp>
 
 Engine::Engine() : _running{true}, _time{} {
-    _eventSystem = std::unique_ptr<EventSystem>{EventSystem::Instance()};
+    _eventSystem = EventSystem::Instance();
     _renderingEngine = std::make_unique<RenderingEngine>(680, 420, "Boiler Engine");
 }
 
 Engine::~Engine() {
-    if(init) Shutdown();
+    if(_init) Shutdown();
     SDL_Quit();
 }
 
 void Engine::Initialize() {
     _eventSystem->Subscribe(SHUTDOWN, this);
-    init = true;
+    _init = true;
 }
 
 void Engine::Shutdown() {
     _eventSystem->Unsubscribe(SHUTDOWN, this);
-    init = false;
+    _init = false;
 }
 
 void Engine::Run() {
-    _running = true;
     Time::SetLastTick();
 
     while (true) {
@@ -42,6 +34,12 @@ void Engine::Run() {
     }
 }
 
-void Engine::HandleMessage(EventType type, void *subject){
-    if(type == SHUTDOWN) _running = false;
+void Engine::HandleMessage(Event &event){
+    EventDispatcher dispatcher{event};
+    dispatcher.Dispatch<ShutdownEvent>(std::bind(&Engine::OnShutdownEvent, this, std::placeholders::_1));
+}
+
+bool Engine::OnShutdownEvent(ShutdownEvent &event) {
+    _running = false;
+    return true;
 }

@@ -7,7 +7,7 @@ class Observable;
 class Observer{
 public:
     virtual ~Observer() = default;
-    virtual void HandleMessage(EventType type, void* subject) = 0;
+    virtual void HandleMessage(Event &event) = 0;
 
 protected:
     Observer() = default;

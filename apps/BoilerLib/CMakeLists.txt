@@ -14,6 +14,8 @@ add_library(BoilerLib STATIC
         ${CMAKE_SOURCE_DIR}/src/boiler/messaging/Observable.cpp
 
         ${CMAKE_SOURCE_DIR}/src/boiler/events/EventSystem.cpp
+
+        ${CMAKE_SOURCE_DIR}/src/boiler/input/InputHandler.cpp
         )
 
 find_package(SDL2 CONFIG REQUIRED)

@@ -52,17 +52,6 @@ void EventSystem::PollEvents() {
             case SDL_QUIT:
                 Notify(event);
                 break;
-
-            case SDL_KEYDOWN:
-            case SDL_KEYUP:
-
-                break;
-
-            case SDL_MOUSEMOTION:
-            case SDL_MOUSEBUTTONDOWN:
-            case SDL_MOUSEBUTTONUP:
-
-                break;
         }
     }
 }

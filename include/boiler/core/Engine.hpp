@@ -9,23 +9,34 @@
 
 class Engine : public Observer {
 private:
-    static bool init;
+    bool _init;
     bool _running;
     Time _time;
 
-    std::unique_ptr<EventSystem> _eventSystem;
+    EventSystem *_eventSystem;
     std::unique_ptr<RenderingEngine> _renderingEngine;
 
 public:
     Engine();
     ~Engine() override;
 
-    static bool Init();
+    bool Init() const {return _init;}
 
+    /**
+     * Runs once at the start to initialize the submodule
+     */
     void Initialize();
+
+    /**
+     * Runs once at the end shutdown the submodules
+     */
     void Shutdown();
 
+    /**
+     * Start the simulation loop
+     */
     void Run();
 
-    void HandleMessage(EventType type, void *subject) override;
+    void HandleMessage(Event &event) override;
+    bool OnShutdownEvent(ShutdownEvent &event);
 };

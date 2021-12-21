@@ -11,7 +11,7 @@ public:
 
     virtual void Subscribe(Observer* observer);
     virtual void Unsubscribe(Observer* observer);
-    virtual void Notify(EventType type);
+    virtual void Notify(Event &event);
 
 protected:
     Observable() = default;
